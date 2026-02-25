@@ -8,7 +8,7 @@ import io
 @st.cache_data
 def load_data():
     df = pd.read_excel(
-        r'Uni_JCologne_Streamlit_v2/Data/Hardardottir_Jackson_2025_Chem_Geol_adjusted.xlsx', 
+        r'Uni_Cologne_Streamlit_v2/Data/Hardardottir_Jackson_2025_Chem_Geol_adjusted.xlsx', 
         sheet_name='Tabelle1', 
         header=4
     )
