@@ -26,7 +26,7 @@ st.markdown(text_1)
 # ---------------------------------------------------------------- Step - check your calibrations
 
 st.header('0. Evaluation in Qtegra - skip if finished')
-text_0 = """Before you use the underlying code to evaluate your data you should look at the goodness of
+text_0 = """Before you use the underlying code to evaluate your data you should look at the quality of
 the calibrations of your individual elements. This can be done within Qtegra. If you need help here ask
 JP or FWo. In general you look at the calibrations that can be found if you look on the left side of Qtegra
 where you can see "TQ" unfold the "TQ folder and click on "Concentrations". You should now see a table
