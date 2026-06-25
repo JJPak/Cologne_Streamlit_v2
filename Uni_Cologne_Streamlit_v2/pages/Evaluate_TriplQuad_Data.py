@@ -5,7 +5,7 @@ import os
 import numpy as np
 from PIL import Image
 from math import floor, log10
-from Module.TQ_eval import del_ycps, subsheets, calc_background_cps, filter_for_qualitiy_data
+from Module.TQ_eval import del_ycps, subsheets, calc_background_cps, filter_for_qualitiy_data, add_list_names
 
 
 path = os.path.dirname(__file__)
@@ -76,21 +76,14 @@ if upload_excel == None:
 #  File preview
 st.subheader(' 2.1 File preview')
 if upload_excel is not None:
-    st.table(df.head(15))
+    box = st.checkbox('Preview uploaded table?', value=False)
+    if box = True
+        st.table(df.head(15), width = 'content', height = 'content')
 
 # ---------------------------------------------------------------- Check if 'Order' and 'Sample' is in column
-try:
-    if upload_excel is not None:
-        if df.loc[1, 'SampleList'] != 'Order':
-            df.loc[1, 'SampleList'] = 'Order'
-        if df.loc[1, 'SampleList.1'] != 'Sample':
-            df.loc[1, 'SampleList.1'] = 'Sample'
-except Exception:
-    text_3 = """<span style="color:#ED6363"> 
-    And datatable check was not successful	
-    </style> """
+add_list_names(df)
 
-    st.markdown(text_3, unsafe_allow_html=True)
+st.markdown(text_3, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------- Name of BG, Name of HNO3, z_score outlier
 
