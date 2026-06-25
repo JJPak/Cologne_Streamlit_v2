@@ -48,8 +48,8 @@ st.markdown(text_0)
 st.header(' 1. Check Excel File ')
 text_2 = """ First check if your Excel file is in the right format"""
 st.markdown(text_2)
-# image1 = Image.open(path+'/images/TQ_eval_plot.png')
-st.image(path+'/images/iCap_eval_plot.png')
+
+st.image(path+'/images/icap_eval_plot.png')
 
 text_3 = """ It is important that the first row of the Excel table is still the type of the data below (e.g. RAW.Average,
 ExtCal.Average, etc.). Furthermore do ***NOT*** delete or change the second (row with zeros), the third  (row with element name, measurement mode),
