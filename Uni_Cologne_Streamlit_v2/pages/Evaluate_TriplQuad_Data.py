@@ -79,9 +79,7 @@ if upload_excel is not None:
   box = st.checkbox('Preview uploaded table?', value=False)
   if box == True:
     st.table(df.head(15), width = 'content', height = 'content')
-
 # ---------------------------------------------------------------- Check if 'Order' and 'Sample' is in column
-add_list_names(df)
 
 st.markdown(text_3, unsafe_allow_html=True)
 
@@ -359,6 +357,7 @@ if evaluate_quest == True:
     elif blank_name == "": # check calibrations
         st.error('You forgot to add your blank. If you dont have a blank write "None"')
     else:
+        df = add_list_names(df)
         df = del_ycps(df)
         df_cps, df_cps_RSD, df_conc, df_ugg_SD, df_conc_RSD, df_calib_coef = subsheets(df)
         # DEPRECATED REASON SEE ABOVE
