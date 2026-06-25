@@ -77,7 +77,7 @@ if upload_excel == None:
 st.subheader(' 2.1 File preview')
 if upload_excel is not None:
   box = st.checkbox('Preview uploaded table?', value=False)
-  if box = True:
+  if box == True:
     st.table(df.head(15), width = 'content', height = 'content')
 
 # ---------------------------------------------------------------- Check if 'Order' and 'Sample' is in column
