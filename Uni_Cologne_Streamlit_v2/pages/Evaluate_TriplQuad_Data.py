@@ -5,7 +5,7 @@ import os
 import numpy as np
 from PIL import Image
 from math import floor, log10
-from Module.TQ_eval import del_ycps, subsheets, calc_background_cps, filter_for_qualitiy_data, add_list_names
+from Module.iCap_eval import del_ycps, subsheets, calc_background_cps, filter_for_qualitiy_data, add_list_names
 
 
 path = os.path.dirname(__file__)
