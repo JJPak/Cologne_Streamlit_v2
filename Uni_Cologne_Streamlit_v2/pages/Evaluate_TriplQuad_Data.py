@@ -76,9 +76,9 @@ if upload_excel == None:
 #  File preview
 st.subheader(' 2.1 File preview')
 if upload_excel is not None:
-    box = st.checkbox('Preview uploaded table?', value=False)
-    if box = True
-        st.table(df.head(15), width = 'content', height = 'content')
+  box = st.checkbox('Preview uploaded table?', value=False)
+  if box = True:
+    st.table(df.head(15), width = 'content', height = 'content')
 
 # ---------------------------------------------------------------- Check if 'Order' and 'Sample' is in column
 add_list_names(df)
