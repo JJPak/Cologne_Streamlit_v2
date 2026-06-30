@@ -405,8 +405,8 @@ if evaluate_quest == True:
                             pass
                 for i in df_ugg_recomend.drop(columns=['Order', 'Sample']):
                     for j in range(len(df_ugg_recomend[i])):
-                        if np.isnan(df_ugg_recomend[i][j]) == False:
-                            df_ugg_recomend[i][j] = round(df_ugg_recomend[i][j], (significant_digits - 1) - int(floor(log10(abs(df_ugg_recomend[i][j])))))
+                        if np.isnan(df_ugg_recomend.loc[j, i]) == False:
+                            df_ugg_recomend.loc[j, i] = round(df_ugg_recomend.loc[j, i], (significant_digits - 1) - int(floor(log10(abs(df_ugg_recomend.loc[j, i])))))
                         else:
                             pass
         else:
