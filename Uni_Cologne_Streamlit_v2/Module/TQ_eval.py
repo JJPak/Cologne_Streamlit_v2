@@ -250,10 +250,10 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
             for j in range(len(df_ugg_recomend[i])):
                 if df_cps.loc[j, i] < filter_val: # Quantification limit ist bigger than cps of sample then make conc in recommended_df to nan
                     # make a list with comments to know what was done
-                    if df_ugg_recomend['Sample'][j] != 'BG' and df_ugg_recomend['Sample'][j] != 'HNO3':
+                    if df_ugg_recomend['Sample'].iloc[j] != 'BG' and df_ugg_recomend['Sample'].iloc[j] != 'HNO3':
                         Problem_step.append('Below Background - conc. deleted')
                         Problematic_element.append(i)
-                        Problematic_sample.append(df_ugg_recomend['Sample'][j])
+                        Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
                     df_ugg_recomend.loc[j, i] = np.nan
 
                 else: pass
@@ -271,16 +271,16 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
         for i in df_conc_RSD.drop(columns=['Sample','Order']):
             for j in range(len(df_ugg_recomend[i])):
                 if df_conc_RSD[i][j] > 6 and df_conc_RSD[i][j] < cut_off_RSD:
-                    if df_ugg_recomend['Sample'][j] != 'BG' and df_ugg_recomend['Sample'][j] != 'HNO3':
+                    if df_ugg_recomend['Sample'].iloc[j] != 'BG' and df_ugg_recomend['Sample'].iloc[j] != 'HNO3':
                             Problem_step.append('RSD above 6% - careful')
                             Problematic_element.append(i)
-                            Problematic_sample.append(df_ugg_recomend['Sample'][j])
+                            Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
                 if df_conc_RSD[i][j] > cut_off_RSD: # realtive error is higher than cut_off_RSD - delete
                     # make a list with comments to know what was done
-                    if df_ugg_recomend['Sample'][j] != 'BG' and df_ugg_recomend['Sample'][j] != 'HNO3':
+                    if df_ugg_recomend['Sample'].iloc[j] != 'BG' and df_ugg_recomend['Sample'].iloc[j] != 'HNO3':
                         Problem_step.append(f'RSD above {cut_off_RSD} - deleted')
                         Problematic_element.append(i)
-                        Problematic_sample.append(df_ugg_recomend['Sample'][j])
+                        Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
                     # make samples with RSD higher than cut_off_RSD to nan
                     df_ugg_recomend.loc[j, i] = np.nan
 
@@ -297,10 +297,10 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
             for j in range(len(df_ugg_recomend[i])):
                 if df_ugg_recomend.loc[j, i] < (cut_off_ppb/1000): # concentration is very low
                     # make a list with comments to know what was done
-                    if df_ugg_recomend['Sample'][j] != 'BG' and df_ugg_recomend['Sample'][j] != 'HNO3':
+                    if df_ugg_recomend['Sample'].iloc[j] != 'BG' and df_ugg_recomend['Sample'].iloc[j] != 'HNO3':
                         Problem_step.append(f'Concentration below {cut_off_ppb} ppb - deleted')
                         Problematic_element.append(i)
-                        Problematic_sample.append(df_ugg_recomend['Sample'][j])
+                        Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
                     # make samples with ppb lower than cut_off_ppb deleted
                     df_ugg_recomend.loc[j, i] = np.nan
         st.success(f"""All samples with ppb belwo {cut_off_ppb} were filtered out""")
