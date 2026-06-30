@@ -267,29 +267,26 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
         
     
     try:
-    # Filter for ugg_RSD
-        for i in df_conc_RSD.drop(columns=['Sample','Order']):
+        # Filter for ugg_RSD
+        for i in df_conc_RSD.drop(columns=['Sample', 'Order']):
             for j in range(len(df_ugg_recomend[i])):
-                df_conc_RSD[i][j] > 6 and df_conc_RSD[i][j] < cut_off_RSD:
-                    if df_ugg_recomend['Sample'].iloc[j] != 'BG' and df_ugg_recomend['Sample'].iloc[j] != 'HNO3':
-                            Problem_step.append('RSD above 6% - careful')
-                            Problematic_element.append(i)
-                            Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
-                df_conc_RSD[i][j] > cut_off_RSD: # realtive error is higher than cut_off_RSD - delete
-                    # make a list with comments to know what was done
-                    if df_ugg_recomend['Sample'].iloc[j] != 'BG' and df_ugg_recomend['Sample'].iloc[j] != 'HNO3':
+                if 6 < df_conc_RSD[i][j] < cut_off_RSD:
+                    if df_ugg_recomend['Sample'].iloc[j] not in ['BG', 'HNO3']:
+                        Problem_step.append('RSD above 6% - careful')
+                        Problematic_element.append(i)
+                        Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
+    
+                if df_conc_RSD[i][j] > cut_off_RSD:  # relative error higher than cutoff
+                    if df_ugg_recomend['Sample'].iloc[j] not in ['BG', 'HNO3']:
                         Problem_step.append(f'RSD above {cut_off_RSD} - deleted')
                         Problematic_element.append(i)
                         Problematic_sample.append(df_ugg_recomend['Sample'].iloc[j])
-                    # make samples with RSD higher than cut_off_RSD to nan
+    
                     df_ugg_recomend.loc[j, i] = np.nan
-
-                else: pass
-        st.success(f"""All samples with RSD above {cut_off_RSD} were filtered out""")
+        st.success(f"All samples with RSD above {cut_off_RSD} were filtered out")
     except Exception:
-        st.error(f"""df_conc_RSD[i][j]""")
-        st.error(f"""An error occured during function "filter_for_qualitiy_data" while trying delete samples with high""")
-        
+        st.write(df_conc_RSD[i][j])
+        st.error("An error occured during function 'filter_for_qualitiy_data' while trying delete samples with high")
         traceback.print_exc()
             
     try:  
