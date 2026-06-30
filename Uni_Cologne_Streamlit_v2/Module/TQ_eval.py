@@ -310,8 +310,7 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
 
     # copy calibration data to new spreadsheet
     try:
-        df_calib_coef_filtered = df_calib_coef[
-        df_calib_coef['Sample'].isin(calib_BG_HNO3_names)].reset_index(drop=True)
+        df_calib_coef_filtered = df_calib_coef[df_calib_coef['Sample'].isin(calib_BG_HNO3_names)].reset_index(drop=True)
     
     except Exception:
         st.error(f""" An error occured during function "filter_for_qualitiy_data" while move calibrations to the calibration subsheet """)
@@ -368,4 +367,4 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
     problem_df = problem_df.sort_values(['Filter', 'Samples']).reset_index(drop=True)
     df_ugg_recomend = pd.concat([df_ugg_recomend, blank_df]).reset_index(drop=True)
     
-    return [df_ugg_recomend, problem_df, df_cps, df_conc, df_conc_RSD, df_calib_coef]
+    return [df_ugg_recomend, problem_df, df_cps, df_conc, df_conc_RSD, df_calib_coef_filtered]
