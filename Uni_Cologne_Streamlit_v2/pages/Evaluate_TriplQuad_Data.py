@@ -377,7 +377,7 @@ if evaluate_quest == True:
         
         calibration.append(BG_name)
         calibration.append(HNO3_name)
-        df_ugg_recomend, problem_df, df_cps_raw, df_conc, df_conc_RSD = filter_for_qualitiy_data (df_cps_raw, mean_val_BG_df, df_conc_RSD, df_conc, df_calib_coef, blank_name, one_calib, multiplicity_BG = confidence_level, cut_off_RSD = RSD_cutoff, cut_off_ppb = ppb_cutoff, calib_BG_HNO3_names=calibration)
+        df_ugg_recomend, problem_df, df_cps_raw, df_conc, df_conc_RSD, df_calib_coef = filter_for_qualitiy_data (df_cps_raw, mean_val_BG_df, df_conc_RSD, df_conc, df_calib_coef, blank_name, one_calib, multiplicity_BG = confidence_level, cut_off_RSD = RSD_cutoff, cut_off_ppb = ppb_cutoff, calib_BG_HNO3_names=calibration)
         st.success('Calculation was successful - prepare file for download')
         
                 # round digits
