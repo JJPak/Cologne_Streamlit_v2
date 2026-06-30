@@ -142,8 +142,6 @@ def subsheets(df):
                     columns=['144Nd (S-SQ-KED)'])
                 
 
-        sheet_list[5] = sheet_list[5].dropna()
-
         st.success(f"""                    
                     Subsheets were created, strings and zeros were transformed to np.nan.
                     Collumns with 103Rh (mp_KED-He), 103Rh (mp_STD), 187Re (mp_KED-He),
