@@ -222,9 +222,16 @@ if choose_standard == 'Neither':
     by a comma. \n Example: Standard1, Standard2, Standard3
     </style>"""
     st.markdown(text_11, unsafe_allow_html=True)
-    calibration = st.text_input(
-        'Add the name of the standards here', placeholder='Standard1, Standard2, Standard3')
-    calibration = calibration.split(',')
+  
+    calibration_input = st.text_input(
+        'Add the name of the standards here',
+        placeholder='Standard1, Standard2, Standard3'
+    )
+
+    calibration = (
+        [x.strip() for x in calibration_input.split(',') if x.strip()]
+        if calibration_input else []
+    )
 
 elif choose_standard == 'Standard calibration':
     calibration = ['BIR-1', 'BHVO-2', 'AGV-2', 'JB-2', 'BCR-2']
