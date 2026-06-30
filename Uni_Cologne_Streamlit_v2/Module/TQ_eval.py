@@ -100,6 +100,7 @@ def subsheets(df):
             sheet_list[i] = sheet_list[i].replace(0, np.nan)
             sheet_list[i] = sheet_list[i].replace('N/A', np.nan)
             sheet_list[i] = sheet_list[i].replace('#ZAHL!', np.nan)
+            sheet_list[i] = sheet_list[i].replace('INF', np.nan)
             
             if '103Rh (S-SQ-KED)' in sheet_list[i]:
                 sheet_list[i] = sheet_list[i].drop(
