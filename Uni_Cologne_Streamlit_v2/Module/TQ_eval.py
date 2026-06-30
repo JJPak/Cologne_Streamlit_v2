@@ -309,16 +309,26 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
     except Exception:
         st.error(f""" An error occured during function "filter_for_qualitiy_data" while trying delete samples with low ppb """)
         traceback.print_exc()
-        
+
+    # copy calibration data to new spreadsheet
+    try:
+        df_calib_coef_filtered = df_calib_coef[
+        df_calib_coef['Sample'].isin(calib_BG_HNO3_names)].reset_index(drop=True)
+    
+    except Exception:
+        st.error(f""" An error occured during function "filter_for_qualitiy_data" while move calibrations to the calibration subsheet """)
+        st.error(f""" Potentially there is no calibration coefficient data """)
+        traceback.print_exc()
+
             
     calib_BG_HNO3_names.append(name_blank)
     
 
     # delete calibratons HNO3 and BG in recommended_df, in standard dev conc in RSD conc
-    for i in calib_BG_HNO3_names:
-        df_ugg_recomend = df_ugg_recomend[df_ugg_recomend['Sample'] != i].reset_index(drop=True)
-        df_conc_RSD = df_conc_RSD[df_conc_RSD['Sample'] != i].reset_index(drop=True)
-        
+    calib_to_remove = set(calib_BG_HNO3_names)
+    df_ugg_recomend = df_ugg_recomend[~df_ugg_recomend['Sample'].isin(calib_to_remove)].reset_index(drop=True)
+    df_conc_RSD = df_conc_RSD[~df_conc_RSD['Sample'].isin(calib_to_remove)].reset_index(drop=True)
+            
 
     # delete problems for HNO3, BG, and calibration
     problem_dict = dict({'Filter':Problem_step,'Element':Problematic_element,'Samples':Problematic_sample})
@@ -347,6 +357,8 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
     except Exception:
         st.error(f"""An error occured during function "filter_for_qualitiy_data" while trying evaluate calibration coefficient""")
 
+
+
         traceback.print_exc()
 
     #again make df
@@ -357,4 +369,4 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
     problem_df = problem_df.sort_values(['Filter', 'Samples']).reset_index(drop=True)
     df_ugg_recomend = pd.concat([df_ugg_recomend, blank_df]).reset_index(drop=True)
     
-    return [df_ugg_recomend, problem_df, df_cps, df_conc, df_conc_RSD]
+    return [df_ugg_recomend, problem_df, df_cps, df_conc, df_conc_RSD, df_calib_coef]
