@@ -108,7 +108,7 @@ def subsheets(df):
 
             if '103Rh | 103Rh (S-TQ-O2))' in sheet_list[i]:
                 sheet_list[i] = sheet_list[i].drop(
-                    columns=['103Rh | 103Rh (S-TQ-O2))'])
+                    columns=['103Rh | 103Rh (S-TQ-O2)'])
 
             if '103Rh (S-SQ-N/A)' in sheet_list[i]:
                 sheet_list[i] = sheet_list[i].drop(
@@ -342,7 +342,8 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
     Problematic_sample = []
     try:
         # evaluate calibration coefficient
-        df_calib_coef_test = df_calib_coef[df_calib_coef['Sample'] == name_one_calib].reset_index(drop=True)
+        df_calib_coef_test = df_calib_coef.copy()
+        df_calib_coef_test = df_calib_coef_test[df_calib_coef_test['Sample'] == name_one_calib].reset_index(drop=True)
         for i in df_calib_coef_test.drop(columns=['Sample','Order']):
             for j in range(len(df_calib_coef_test[i])):
                 if df_calib_coef_test[i][j] < 0.995 and df_calib_coef_test[i][j] > 0.990:
