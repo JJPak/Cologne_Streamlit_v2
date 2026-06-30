@@ -342,13 +342,13 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
     Problematic_sample = []
     try:
         # evaluate calibration coefficient
-        df_calib_coef = df_calib_coef[df_calib_coef['Sample'] == name_one_calib].reset_index(drop=True)
-        for i in df_calib_coef.drop(columns=['Sample','Order']):
-            for j in range(len(df_calib_coef[i])):
-                if df_calib_coef[i][j] < 0.995 and df_calib_coef[i][j] > 0.990:
+        df_calib_coef_test = df_calib_coef[df_calib_coef['Sample'] == name_one_calib].reset_index(drop=True)
+        for i in df_calib_coef_test.drop(columns=['Sample','Order']):
+            for j in range(len(df_calib_coef_test[i])):
+                if df_calib_coef_test[i][j] < 0.995 and df_calib_coef_test[i][j] > 0.990:
                     Problem_step.append(f'Calibration {j+1} is below 0.995 be careful')
                     Problematic_element.append(i)
-                if df_calib_coef[i][j] < 0.990:
+                if df_calib_coef_test[i][j] < 0.990:
                     Problem_step.append(f'Calibration {j+1} is below 0.990 dont use this calibration and the samples that were calculated with it')
                     Problematic_element.append(i)
 
