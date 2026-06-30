@@ -185,10 +185,10 @@ def calc_background_cps(df_cps, name_of_BG : str = 'BG', name_of_wash : str= 'HN
             
             for j in range(len(df_cps[i])):
                 # calc z-score
-                z_score_sample = ((df_cps[i][j] - mean )/sd)
+                z_score_sample = ((df_cps.loc[j, i] - mean )/sd)
                 
                 if z_score_sample >  Z_score_outlier or z_score_sample < ((-1) *Z_score_outlier)  :
-                    df_cps[i][j] = np.nan
+                    df_cps.loc[j, i] = np.nan
     except Exception:
 
         st.error(f""" An error occured during function "calc_background_cps" while filtering outliers within BG/HNO3 """)
@@ -249,7 +249,7 @@ def filter_for_qualitiy_data (df_cps, background_mean_sd_df, df_conc_RSD, df_con
             # calc mean + multiplicity * standard deviation
             filter_val = mean_df[i][0] + multiplicity_BG * sd_df[i][0]
             for j in range(len(df_ugg_recomend[i])):
-                if df_cps[i][j] < filter_val: # Quantification limit ist bigger than cps of sample then make conc in recommended_df to nan
+                if df_cps.loc[j, i] < filter_val: # Quantification limit ist bigger than cps of sample then make conc in recommended_df to nan
                     # make a list with comments to know what was done
                     if df_ugg_recomend['Sample'][j] != 'BG' and df_ugg_recomend['Sample'][j] != 'HNO3':
                         Problem_step.append('Below Background - conc. deleted')
