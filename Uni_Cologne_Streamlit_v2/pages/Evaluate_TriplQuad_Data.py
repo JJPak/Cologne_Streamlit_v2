@@ -393,8 +393,8 @@ if evaluate_quest == True:
                 # round to significant digits
                 for i in df_conc.drop(columns=['Order', 'Sample']):
                     for j in range(len(df_conc[i])):
-                        if np.isnan(df_conc[i][j]) == False:
-                            df_conc[i][j] = round(df_conc[i][j], (significant_digits - 1) - int(floor(log10(abs(df_conc[i][j])))))
+                        if np.isnan(df_conc.loc[j, i]) == False:
+                            df_conc.loc[j, i] = round(df_conc.loc[j, i], (significant_digits - 1) - int(floor(log10(abs(df_conc.loc[j, i])))))
                         else:
                             pass
                 for i in df_ugg_SD.drop(columns=['Order', 'Sample']):
