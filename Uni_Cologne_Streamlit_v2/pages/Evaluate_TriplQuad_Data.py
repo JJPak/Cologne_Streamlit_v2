@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from math import floor, log10
 from Module.TQ_eval import del_ycps, subsheets, calc_background_cps, filter_for_qualitiy_data, add_list_names
-
+pd.set_option('future.no_silent_downcasting', True)
 
 path = os.path.dirname(__file__)
 
