@@ -4,7 +4,7 @@ import traceback
 import warnings
 from math import floor, log10
 import streamlit as st
-
+pd.set_option('future.no_silent_downcasting', True)
 
 
 def add_list_names(df):
