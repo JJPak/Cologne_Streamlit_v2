@@ -85,6 +85,10 @@ def main():
     def idx(col_name, fallback=0):
         return available_columns.index(col_name) if col_name in available_columns else fallback
 
+    if filtered_df.empty:
+        st.warning("No data matches the current hotspot/island filters.")
+        st.stop()
+        
     available_columns = list(filtered_df.columns)
     col1_index = available_columns.index("1") if "1" in available_columns else 0
     x1 = st.selectbox("X1:", available_columns, index=idx("(206Pb/204Pb)measured", 0))
@@ -165,9 +169,7 @@ def main():
 
 
     
-    # Hintergrunddaten
-    if show_background and bg_df is not None:
-        ax.scatter(x_bg_vals, y_bg_vals, color='gray', alpha=0.5, label='Alle Daten', zorder=1, edgecolors='none', s=40)
+
 
     # Gruppierungslogik
     def labelize(arr):
@@ -223,6 +225,12 @@ def main():
     n_colors = max(1, len(group_keys))
     palette = sns.color_palette("husl", n_colors=n_colors)
 
+
+    # Plot background data
+    if show_background and bg_df is not None:
+        ax.scatter(x_bg_vals, y_bg_vals, color='gray', alpha=0.5, label='Alle Daten', zorder=1, edgecolors='none', s=40)
+
+    # plott foreground data
     plotted_any = False
     for i, key in enumerate(group_keys):
         mask = make_mask(key)
@@ -251,6 +259,9 @@ def main():
         ax.set_xscale('log')
     if y_log:
         ax.set_yscale('log')
+
+
+
     
 
     handles, labels = ax.get_legend_handles_labels()
