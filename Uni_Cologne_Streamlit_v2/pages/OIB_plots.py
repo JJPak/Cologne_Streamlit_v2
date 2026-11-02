@@ -160,13 +160,6 @@ def main():
     y_min = st.number_input("Y min:", key="y_min_num")
     y_max = st.number_input("Y max:", key="y_max_num")
 
-    fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
-    ax = fig.add_axes([
-    LEFT / fig_w,
-    (BOTTOM + LEG_H + GAP) / fig_h,
-    PLOT_W / fig_w,
-    PLOT_H / fig_h
-    ])
     
     # after plotting data on ax (or in a plotting function)
     handles, labels = ax.get_legend_handles_labels()
