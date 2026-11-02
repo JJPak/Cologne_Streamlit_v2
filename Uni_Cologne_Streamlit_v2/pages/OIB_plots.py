@@ -204,15 +204,15 @@ def main():
                 return filtered_df['Island or seamount'].isna() if g == 'Nicht angegeben' else (filtered_df['Island or seamount'].astype(str) == g)
 
     # legend
-    ncol = 4
     n_items = max(1, len(group_keys))
+    ncol = min(4, n_items)
     nrows = max(1, math.ceil(n_items / ncol))
     
     PLOT_W, PLOT_H = 6.0, 6.0
     LEFT, RIGHT, TOP, BOTTOM = 0.8, 0.2, 0.2, 0.2
-    GAP = 0.08
-    LEG_H = 0.28 * nrows + 0.15
-    
+    GAP = 0.20
+    LEG_H = 0.42 * nrows + 0.30
+        
     fig_w = LEFT + PLOT_W + RIGHT
     fig_h = TOP + PLOT_H + GAP + LEG_H + BOTTOM
     
