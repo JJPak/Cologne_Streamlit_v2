@@ -261,11 +261,8 @@ def main():
         ax.set_yscale('log')
 
 
-
-    
-
-    handles, labels = ax.get_legend_handles_labels()
-    ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
+    # handles, labels = ax.get_legend_handles_labels()
+    # ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
     
     st.pyplot(fig)
 
