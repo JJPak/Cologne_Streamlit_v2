@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io
+import math
 
 @st.cache_data
 def load_data():
@@ -161,6 +162,32 @@ def main():
 
     fig, ax = plt.subplots(figsize=(6,6), dpi=150)
 
+    # after plotting data on ax (or in a plotting function)
+    handles, labels = ax.get_legend_handles_labels()
+    ncol = 4
+    nrows = max(1, math.ceil(len(labels) / ncol))
+    
+    # fixed plot size
+    PLOT_W, PLOT_H = 6.0, 6.0
+    LEFT, RIGHT, TOP, BOTTOM = 0.8, 0.2, 0.2, 0.2
+    GAP = 0.08
+    LEG_H = 0.28 * nrows + 0.15   # grows with legend size
+    
+    fig_w = LEFT + PLOT_W + RIGHT
+    fig_h = TOP + PLOT_H + GAP + LEG_H + BOTTOM
+    fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
+    
+    # plot axis (fixed physical size)
+    ax_plot = fig.add_axes([
+        LEFT / fig_w,
+        (BOTTOM + LEG_H + GAP) / fig_h,
+        PLOT_W / fig_w,
+        PLOT_H / fig_h
+    ])
+
+
+
+    
     # Hintergrunddaten
     if show_background and bg_df is not None:
         ax.scatter(x_bg_vals, y_bg_vals, color='gray', alpha=0.5, label='Alle Daten', zorder=1, edgecolors='none', s=40)
@@ -229,44 +256,13 @@ def main():
     if y_log:
         ax.set_yscale('log')
     
-    # set aspect ratio so that x and y axis are always consistent
-    ax.set_box_aspect(1)
-    
-    x0, x1 = ax.get_xlim()
-    y0, y1 = ax.get_ylim()
-    span = max(x1 - x0, y1 - y0)
-    xc = (x0 + x1) / 2
-    yc = (y0 + y1) / 2
-    ax.set_xlim(xc - span/2, xc + span/2)
-    ax.set_ylim(yc - span/2, yc + span/2)
-    
-    # make sure legend doesnt overlap with figure
-    fig.canvas.draw()
-    renderer = fig.canvas.get_renderer()
 
-    # bottom of axis decorations (ticks + axis labels) in figure coordinates
-    axis_text_bottom = ax.get_tightbbox(renderer).transformed(fig.transFigure.inverted()).y0
-    
-    handles, labels = ax.get_legend_handles_labels()
-    ncol = min(4, max(1, len(labels)))
-    
-    leg = fig.legend(
-        handles, labels,
-        loc="upper center",
-        bbox_to_anchor=(0.5, axis_text_bottom - 0.005),  # tiny fixed gap
-        ncol=ncol,
-        frameon=True
-    )
-    
-    # ensure legend fits inside figure; if not, enlarge bottom margin and re-anchor
-    fig.canvas.draw()
-    leg_box = leg.get_window_extent(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted())
-    if leg_box.y0 < 0:
-        fig.subplots_adjust(bottom=fig.subplotpars.bottom + abs(leg_box.y0) + 0.005)
-        fig.canvas.draw()
-        axis_text_bottom = ax.get_tightbbox(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted()).y0
-        leg.set_bbox_to_anchor((0.5, axis_text_bottom - 0.005), transform=fig.transFigure)
 
+
+    # legend axis (independent area below)
+    ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
+    ax_leg.axis("off")
+    ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
     
     st.pyplot(fig)
 
