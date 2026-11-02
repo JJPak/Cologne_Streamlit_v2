@@ -7,6 +7,7 @@ import io
 import math
 
 @st.cache_data
+# load data Hardardottir and Jackson 2025 Chem. Geol
 def load_data():
     df = pd.read_excel(
         r'Uni_Cologne_Streamlit_v2/Data/Hardardottir_Jackson_2025_Chem_Geol_adjusted.xlsx', 
@@ -25,10 +26,13 @@ def load_data():
     return plots
 
 def main():
-    st.title("OIB Plot Streamlit App")
+    st.title("OIB Plot App")
+    st.header("Data from Hardardottir and Jackson 2025, Chemical Geology")
 
+    # load data
     OIB_plots = load_data()
 
+    #choose methods and make subdfs
     method = st.selectbox("Method:", ['ID', 'ICP-MS'], index=1)
     if method == 'ID':
         mask = ~OIB_plots.columns.str.contains('ICP-MS', case=False, na=False)
@@ -39,13 +43,13 @@ def main():
     sub_df = sub_df.iloc[1:].reset_index(drop=True)
     bg_df = sub_df.copy()
 
-    # Hotspot Auswahl
+    # choose hotspots and ilands and prepare sub dfs
     hotspot_options = ['Nicht angegeben' if pd.isna(opt) else str(opt) for opt in sub_df['Hotspot'].unique()]
     hotspot_options = sorted(set(hotspot_options))
     all_hotspot = st.checkbox("Plot all Hotspots (untick to choose individual OIB)", value=True)
     selected_hotspots = st.multiselect("Choose Hotspots:", hotspot_options, disabled=all_hotspot)
 
-    # Island Auswahl
+    # choose island
     def get_island_options(hotspots):
         if not hotspots:
             return ['All Islands']
@@ -81,7 +85,7 @@ def main():
     if 'All Islands' not in selected_islands:
         st.write(f"Aktiver Island-Filter: {', '.join(selected_islands)}")
 
-    # Achsen-Auswahl
+    # choose what to plot
     def idx(col_name, fallback=0):
         return available_columns.index(col_name) if col_name in available_columns else fallback
 
@@ -103,10 +107,10 @@ def main():
     with col2:
         y_log = st.checkbox("Log scale for Y-axis", value=False)
 
-    # Achsenlimits and autoscale button
+    # autoscale axes limits
     autoscale_btn = st.button("Autoscale axes")
 
-    # Compute ratios
+    # calculate ratios
     def compute_full_ratios(df, x1, x2, y1, y2):
         x_num = pd.to_numeric(df[x1], errors='coerce')
         x_den = pd.to_numeric(df[x2], errors='coerce')
@@ -122,7 +126,7 @@ def main():
     x_vals_autoscale = x_ratio_full[valid_all]
     y_vals_autoscale = y_ratio_full[valid_all]
 
-    # Background ratios
+    # calculate ratios and also use for autoscaling in case data is checked
     if show_background := st.checkbox("OIB Background data", value=True):
         x_bg, y_bg = compute_full_ratios(bg_df, x1, x2, y1, y2)
         valid_bg = x_bg.notna() & y_bg.notna() & np.isfinite(x_bg) & np.isfinite(y_bg)
@@ -144,34 +148,26 @@ def main():
         x_all_vals = x_vals_autoscale[x_vals_autoscale > 0] if x_log else x_vals_autoscale
         y_all_vals = y_vals_autoscale[y_vals_autoscale > 0] if y_log else y_vals_autoscale
 
-    # Use widget keys in session state so autoscale and number_input stay in sync
+    # autoscale
     if "x_min_num" not in st.session_state: st.session_state.x_min_num = 0.0
     if "x_max_num" not in st.session_state: st.session_state.x_max_num = 1.0
     if "y_min_num" not in st.session_state: st.session_state.y_min_num = 0.0
     if "y_max_num" not in st.session_state: st.session_state.y_max_num = 1.0
 
-
-    # Autoscale logic
     if autoscale_btn:
         st.session_state.x_min_num = float(x_all_vals.min()) if not x_all_vals.empty else 0.0
         st.session_state.x_max_num = float(x_all_vals.max()) if not x_all_vals.empty else 1.0
         st.session_state.y_min_num = float(y_all_vals.min()) if not y_all_vals.empty else 0.0
         st.session_state.y_max_num = float(y_all_vals.max()) if not y_all_vals.empty else 1.0
 
-    # Manual controls read/write same keys
+    # Manual controls overwrite autoscale
     x_min = st.number_input("X min:", key="x_min_num")
     x_max = st.number_input("X max:", key="x_max_num")
     y_min = st.number_input("Y min:", key="y_min_num")
     y_max = st.number_input("Y max:", key="y_max_num")
 
 
-
-
-
-    
-
-
-    # Gruppierungslogik
+    # group islands
     def labelize(arr):
         return ['Nicht angegeben' if pd.isna(v) else str(v) for v in arr]
 
@@ -221,7 +217,7 @@ def main():
     ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
     ax_leg.axis("off")
 
-    
+    # colors and palette
     n_colors = max(1, len(group_keys))
     palette = sns.color_palette("husl", n_colors=n_colors)
 
@@ -260,13 +256,14 @@ def main():
     if y_log:
         ax.set_yscale('log')
 
+    # plot legend
+    handles, labels = ax.get_legend_handles_labels()
+    ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
 
-    # handles, labels = ax.get_legend_handles_labels()
-    # ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
-    
+    # plot
     st.pyplot(fig)
 
-    # PDF Download Button
+    # PDF download
     buf = io.BytesIO()
     fig.savefig(buf, format="pdf", bbox_inches='tight', dpi=300, pad_inches=0.5)
     buf.seek(0)
