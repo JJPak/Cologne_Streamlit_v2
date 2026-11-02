@@ -149,13 +149,6 @@ def main():
         st.session_state.y_min_num = float(y_all_vals.min()) if not y_all_vals.empty else 0.0
         st.session_state.y_max_num = float(y_all_vals.max()) if not y_all_vals.empty else 1.0
 
-
-    # Always show manual controls (use session_state for prefill)
-    st.session_state.x_min = st.number_input("X min:", value=st.session_state.x_min, key="x_min_num")
-    st.session_state.x_max = st.number_input("X max:", value=st.session_state.x_max, key="x_max_num")
-    st.session_state.y_min = st.number_input("Y min:", value=st.session_state.y_min, key="y_min_num")
-    st.session_state.y_max = st.number_input("Y max:", value=st.session_state.y_max, key="y_max_num")
-
     # Manual controls read/write same keys
     x_min = st.number_input("X min:", key="x_min_num")
     x_max = st.number_input("X max:", key="x_max_num")
