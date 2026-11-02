@@ -83,10 +83,10 @@ def main():
     # Achsen-Auswahl
     available_columns = list(filtered_df.columns)
     col1_index = available_columns.index("1") if "1" in available_columns else 0
-    x1 = st.selectbox("Plot X (numerator):", available_columns, index='(206Pb/204Pb)measured')
-    x2 = st.selectbox("Plot X (denominator):", available_columns, index="1")
-    y1 = st.selectbox("Plot Y (numerator):", available_columns, index='eNd')
-    y2 = st.selectbox("Plot Y (denominator):", available_columns, index="1")
+    x1 = st.selectbox("X1:", available_columns, index=idx("1", 0))
+    x2 = st.selectbox("X2:", available_columns, index=idx("1", 0))
+    y1 = st.selectbox("Y1:", available_columns, index=idx("1", 0))
+    y2 = st.selectbox("Y2:", available_columns, index=idx("1", 0))
     # Add the log scale checkboxes
     col1, col2 = st.columns(2)
     with col1:
