@@ -219,7 +219,7 @@ def main():
         ax.scatter(x_vals, y_vals,
                    color=palette[i % len(palette)], label=str(key),
                    alpha=1, zorder=2, edgecolors='black', s=40)
-
+    ax.set_aspect('equal', adjustable='box')
     ax.set_xlabel(f'{x1} / {x2}')
     ax.set_ylabel(f'{y1} / {y2}')
     ax.set_xlim(x_min, x_max)
