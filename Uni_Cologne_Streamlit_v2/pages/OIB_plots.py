@@ -160,25 +160,8 @@ def main():
     y_min = st.number_input("Y min:", key="y_min_num")
     y_max = st.number_input("Y max:", key="y_max_num")
 
-    
-    # after plotting data on ax (or in a plotting function)
-    handles, labels = ax.get_legend_handles_labels()
-    ncol = 4
-    n_items = max(1, len(group_keys))   # or max(1, len(labels))
-    nrows = max(1, math.ceil(n_items / ncol))
-    
-    PLOT_W, PLOT_H = 6.0, 6.0
-    LEFT, RIGHT, TOP, BOTTOM = 0.8, 0.2, 0.2, 0.2
-    GAP = 0.08
-    LEG_H = 0.28 * nrows + 0.15
-    
-    fig_w = LEFT + PLOT_W + RIGHT
-    fig_h = TOP + PLOT_H + GAP + LEG_H + BOTTOM
-    
-    fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
-    ax = fig.add_axes([LEFT / fig_w, (BOTTOM + LEG_H + GAP) / fig_h, PLOT_W / fig_w, PLOT_H / fig_h])
-    ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
-    ax_leg.axis("off")
+
+
 
 
     
@@ -218,6 +201,25 @@ def main():
             def make_mask(g):
                 return filtered_df['Island or seamount'].isna() if g == 'Nicht angegeben' else (filtered_df['Island or seamount'].astype(str) == g)
 
+    # legend
+    ncol = 4
+    n_items = max(1, len(group_keys))
+    nrows = max(1, math.ceil(n_items / ncol))
+    
+    PLOT_W, PLOT_H = 6.0, 6.0
+    LEFT, RIGHT, TOP, BOTTOM = 0.8, 0.2, 0.2, 0.2
+    GAP = 0.08
+    LEG_H = 0.28 * nrows + 0.15
+    
+    fig_w = LEFT + PLOT_W + RIGHT
+    fig_h = TOP + PLOT_H + GAP + LEG_H + BOTTOM
+    
+    fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
+    ax = fig.add_axes([LEFT / fig_w, (BOTTOM + LEG_H + GAP) / fig_h, PLOT_W / fig_w, PLOT_H / fig_h])
+    ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
+    ax_leg.axis("off")
+
+    
     n_colors = max(1, len(group_keys))
     palette = sns.color_palette("husl", n_colors=n_colors)
 
@@ -250,12 +252,6 @@ def main():
     if y_log:
         ax.set_yscale('log')
     
-
-
-
-    # legend axis (independent area below)
-    ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
-    ax_leg.axis("off")
 
     handles, labels = ax.get_legend_handles_labels()
     ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
