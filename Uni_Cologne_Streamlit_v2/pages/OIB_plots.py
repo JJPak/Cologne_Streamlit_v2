@@ -41,7 +41,7 @@ def main():
     # Hotspot Auswahl
     hotspot_options = ['Nicht angegeben' if pd.isna(opt) else str(opt) for opt in sub_df['Hotspot'].unique()]
     hotspot_options = sorted(set(hotspot_options))
-    all_hotspot = st.checkbox("All Hotspots", value=True)
+    all_hotspot = st.checkbox("Plot all Hotspots (untick to choose individual OIB)", value=True)
     selected_hotspots = st.multiselect("Choose Hotspots:", hotspot_options, disabled=all_hotspot)
 
     # Island Auswahl
@@ -83,10 +83,10 @@ def main():
     # Achsen-Auswahl
     available_columns = list(filtered_df.columns)
     col1_index = available_columns.index("1") if "1" in available_columns else 0
-    x1 = st.selectbox("X1:", available_columns, index=col1_index)
-    x2 = st.selectbox("X2:", available_columns, index=col1_index)
-    y1 = st.selectbox("Y1:", available_columns, index=col1_index)
-    y2 = st.selectbox("Y2:", available_columns, index=col1_index)
+    x1 = st.selectbox("Plot X (numerator):", available_columns, index=col1_index)
+    x2 = st.selectbox("Plot X (denominator):", available_columns, index=col1_index)
+    y1 = st.selectbox("Plot Y (numerator):", available_columns, index=col1_index)
+    y2 = st.selectbox("Plot Y (denominator):", available_columns, index=col1_index)
     # Add the log scale checkboxes
     col1, col2 = st.columns(2)
     with col1:
@@ -135,18 +135,20 @@ def main():
         x_all_vals = x_vals_autoscale[x_vals_autoscale > 0] if x_log else x_vals_autoscale
         y_all_vals = y_vals_autoscale[y_vals_autoscale > 0] if y_log else y_vals_autoscale
 
-    # Use session state to keep values persistent and editable
-    if "x_min" not in st.session_state: st.session_state.x_min = 0.0
-    if "x_max" not in st.session_state: st.session_state.x_max = 1.0
-    if "y_min" not in st.session_state: st.session_state.y_min = 0.0
-    if "y_max" not in st.session_state: st.session_state.y_max = 1.0
+    # Use widget keys in session state so autoscale and number_input stay in sync
+    if "x_min_num" not in st.session_state: st.session_state.x_min_num = 0.0
+    if "x_max_num" not in st.session_state: st.session_state.x_max_num = 1.0
+    if "y_min_num" not in st.session_state: st.session_state.y_min_num = 0.0
+    if "y_max_num" not in st.session_state: st.session_state.y_max_num = 1.0
+
 
     # Autoscale logic
     if autoscale_btn:
-        st.session_state.x_min = float(x_all_vals.min()) if not x_all_vals.empty else 0.0
-        st.session_state.x_max = float(x_all_vals.max()) if not x_all_vals.empty else 1.0
-        st.session_state.y_min = float(y_all_vals.min()) if not y_all_vals.empty else 0.0
-        st.session_state.y_max = float(y_all_vals.max()) if not y_all_vals.empty else 1.0
+        st.session_state.x_min_num = float(x_all_vals.min()) if not x_all_vals.empty else 0.0
+        st.session_state.x_max_num = float(x_all_vals.max()) if not x_all_vals.empty else 1.0
+        st.session_state.y_min_num = float(y_all_vals.min()) if not y_all_vals.empty else 0.0
+        st.session_state.y_max_num = float(y_all_vals.max()) if not y_all_vals.empty else 1.0
+
 
     # Always show manual controls (use session_state for prefill)
     st.session_state.x_min = st.number_input("X min:", value=st.session_state.x_min, key="x_min_num")
@@ -154,10 +156,11 @@ def main():
     st.session_state.y_min = st.number_input("Y min:", value=st.session_state.y_min, key="y_min_num")
     st.session_state.y_max = st.number_input("Y max:", value=st.session_state.y_max, key="y_max_num")
 
-    x_min = st.session_state.x_min
-    x_max = st.session_state.x_max
-    y_min = st.session_state.y_min
-    y_max = st.session_state.y_max
+    # Manual controls read/write same keys
+    x_min = st.number_input("X min:", key="x_min_num")
+    x_max = st.number_input("X max:", key="x_max_num")
+    y_min = st.number_input("Y min:", key="y_min_num")
+    y_max = st.number_input("Y max:", key="y_max_num")
 
     fig, ax = plt.subplots(figsize=(6,6), dpi=150)
 
