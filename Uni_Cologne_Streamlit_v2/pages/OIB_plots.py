@@ -83,10 +83,10 @@ def main():
     # Achsen-Auswahl
     available_columns = list(filtered_df.columns)
     col1_index = available_columns.index("1") if "1" in available_columns else 0
-    x1 = st.selectbox("Plot X (numerator):", available_columns, index=col1_index)
-    x2 = st.selectbox("Plot X (denominator):", available_columns, index=col1_index)
-    y1 = st.selectbox("Plot Y (numerator):", available_columns, index=col1_index)
-    y2 = st.selectbox("Plot Y (denominator):", available_columns, index=col1_index)
+    x1 = st.selectbox("Plot X (numerator):", available_columns, index='(206Pb/204Pb)measured')
+    x2 = st.selectbox("Plot X (denominator):", available_columns, index="1")
+    y1 = st.selectbox("Plot Y (numerator):", available_columns, index='eNd')
+    y2 = st.selectbox("Plot Y (denominator):", available_columns, index="1")
     # Add the log scale checkboxes
     col1, col2 = st.columns(2)
     with col1:
@@ -224,7 +224,22 @@ def main():
         ax.set_xscale('log')
     if y_log:
         ax.set_yscale('log')
-    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.65), ncol=4)
+
+
+    handles, labels = ax.get_legend_handles_labels()
+    leg = fig.legend(
+        handles, labels,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.02),  
+        ncol=4,
+        frameon=True
+    )
+    
+    fig.canvas.draw()
+    leg_top = leg.get_window_extent(fig.canvas.get_renderer()) \
+                 .transformed(fig.transFigure.inverted()).y1
+    fig.subplots_adjust(bottom=leg_top + 0.02)  
+    
     #fig.tight_layout()
 
     st.pyplot(fig)
