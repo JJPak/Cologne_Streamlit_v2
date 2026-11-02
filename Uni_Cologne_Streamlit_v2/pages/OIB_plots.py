@@ -118,7 +118,7 @@ def main():
     y_vals_autoscale = y_ratio_full[valid_all]
 
     # Background ratios
-    if show_background := st.checkbox("Alle Hotspots im Hintergrund", value=False):
+    if show_background := st.checkbox("OIB Background data", value=True):
         x_bg, y_bg = compute_full_ratios(bg_df, x1, x2, y1, y2)
         valid_bg = x_bg.notna() & y_bg.notna() & np.isfinite(x_bg) & np.isfinite(y_bg)
         x_bg_vals = x_bg[valid_bg]
@@ -229,23 +229,34 @@ def main():
     if y_log:
         ax.set_yscale('log')
 
+    # make sure legend doesnt overlap with figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
 
+    # bottom of axis decorations (ticks + axis labels) in figure coordinates
+    axis_text_bottom = ax.get_tightbbox(renderer).transformed(fig.transFigure.inverted()).y0
+    
     handles, labels = ax.get_legend_handles_labels()
+    ncol = min(4, max(1, len(labels)))
+    
     leg = fig.legend(
         handles, labels,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.02),  
-        ncol=4,
+        loc="upper center",
+        bbox_to_anchor=(0.5, axis_text_bottom - 0.005),  # tiny fixed gap
+        ncol=ncol,
         frameon=True
     )
     
+    # ensure legend fits inside figure; if not, enlarge bottom margin and re-anchor
     fig.canvas.draw()
-    leg_top = leg.get_window_extent(fig.canvas.get_renderer()) \
-                 .transformed(fig.transFigure.inverted()).y1
-    fig.subplots_adjust(bottom=leg_top + 0.02)  
-    
-    #fig.tight_layout()
+    leg_box = leg.get_window_extent(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted())
+    if leg_box.y0 < 0:
+        fig.subplots_adjust(bottom=fig.subplotpars.bottom + abs(leg_box.y0) + 0.005)
+        fig.canvas.draw()
+        axis_text_bottom = ax.get_tightbbox(fig.canvas.get_renderer()).transformed(fig.transFigure.inverted()).y0
+        leg.set_bbox_to_anchor((0.5, axis_text_bottom - 0.005), transform=fig.transFigure)
 
+    
     st.pyplot(fig)
 
     # PDF Download Button
