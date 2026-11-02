@@ -219,7 +219,7 @@ def main():
         ax.scatter(x_vals, y_vals,
                    color=palette[i % len(palette)], label=str(key),
                    alpha=1, zorder=2, edgecolors='black', s=40)
-    ax.set_aspect('equal', adjustable='box')
+ 
     ax.set_xlabel(f'{x1} / {x2}')
     ax.set_ylabel(f'{y1} / {y2}')
     ax.set_xlim(x_min, x_max)
@@ -228,7 +228,18 @@ def main():
         ax.set_xscale('log')
     if y_log:
         ax.set_yscale('log')
-
+    
+    # set aspect ratio so that x and y axis are always consistent
+    ax.set_box_aspect(1)
+    
+    x0, x1 = ax.get_xlim()
+    y0, y1 = ax.get_ylim()
+    span = max(x1 - x0, y1 - y0)
+    xc = (x0 + x1) / 2
+    yc = (y0 + y1) / 2
+    ax.set_xlim(xc - span/2, xc + span/2)
+    ax.set_ylim(yc - span/2, yc + span/2)
+    
     # make sure legend doesnt overlap with figure
     fig.canvas.draw()
     renderer = fig.canvas.get_renderer()
