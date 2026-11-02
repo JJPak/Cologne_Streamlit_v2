@@ -86,11 +86,12 @@ def main():
 
     available_columns = list(filtered_df.columns)
     col1_index = available_columns.index("1") if "1" in available_columns else 0
-    x1 = st.selectbox("X1:", available_columns, index=idx("1", 0))
+    x1 = st.selectbox("X1:", available_columns, index=idx("(206Pb/204Pb)measured", 0))
     x2 = st.selectbox("X2:", available_columns, index=idx("1", 0))
-    y1 = st.selectbox("Y1:", available_columns, index=idx("1", 0))
+    y1 = st.selectbox("Y1:", available_columns, index=idx("eNd", 0))
     y2 = st.selectbox("Y2:", available_columns, index=idx("1", 0))
-    # Add the log scale checkboxes
+    
+    # log scale checkboxes
     col1, col2 = st.columns(2)
     with col1:
         x_log = st.checkbox("Log scale for X-axis", value=False)
