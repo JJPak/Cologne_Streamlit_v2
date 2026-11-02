@@ -160,8 +160,14 @@ def main():
     y_min = st.number_input("Y min:", key="y_min_num")
     y_max = st.number_input("Y max:", key="y_max_num")
 
-    fig, ax = plt.subplots(figsize=(6,6), dpi=150)
-
+    fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
+    ax = fig.add_axes([
+    LEFT / fig_w,
+    (BOTTOM + LEG_H + GAP) / fig_h,
+    PLOT_W / fig_w,
+    PLOT_H / fig_h
+    ])
+    
     # after plotting data on ax (or in a plotting function)
     handles, labels = ax.get_legend_handles_labels()
     ncol = 4
@@ -262,6 +268,8 @@ def main():
     # legend axis (independent area below)
     ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
     ax_leg.axis("off")
+
+    handles, labels = ax.get_legend_handles_labels()
     ax_leg.legend(handles, labels, loc="upper center", ncol=ncol, frameon=True)
     
     st.pyplot(fig)
