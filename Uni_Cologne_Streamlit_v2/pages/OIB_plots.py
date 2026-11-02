@@ -171,19 +171,17 @@ def main():
     # after plotting data on ax (or in a plotting function)
     handles, labels = ax.get_legend_handles_labels()
     ncol = 4
-    n_items = max(1, len(group_keys))  # or len(labels) later
+    n_items = max(1, len(group_keys))   # or max(1, len(labels))
     nrows = max(1, math.ceil(n_items / ncol))
     
-    # layout constants
     PLOT_W, PLOT_H = 6.0, 6.0
     LEFT, RIGHT, TOP, BOTTOM = 0.8, 0.2, 0.2, 0.2
     GAP = 0.08
     LEG_H = 0.28 * nrows + 0.15
     
-    # define fig_w/fig_h BEFORE using them
     fig_w = LEFT + PLOT_W + RIGHT
     fig_h = TOP + PLOT_H + GAP + LEG_H + BOTTOM
-
+    
     fig = plt.figure(figsize=(fig_w, fig_h), dpi=150)
     ax = fig.add_axes([LEFT / fig_w, (BOTTOM + LEG_H + GAP) / fig_h, PLOT_W / fig_w, PLOT_H / fig_h])
     ax_leg = fig.add_axes([LEFT / fig_w, BOTTOM / fig_h, PLOT_W / fig_w, LEG_H / fig_h])
