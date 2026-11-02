@@ -46,7 +46,7 @@ def main():
     # choose hotspots and ilands and prepare sub dfs
     hotspot_options = ['Nicht angegeben' if pd.isna(opt) else str(opt) for opt in sub_df['Hotspot'].unique()]
     hotspot_options = sorted(set(hotspot_options))
-    all_hotspot = st.checkbox("Plot all Hotspots (untick to choose individual OIB)", value=True)
+    all_hotspot = st.checkbox("Plot all Hotspots (untick to choose individual plume systems and islands)", value=True)
     selected_hotspots = st.multiselect("Choose Hotspots:", hotspot_options, disabled=all_hotspot)
 
     # choose island
