@@ -210,7 +210,7 @@ def main():
     
     PLOT_W, PLOT_H = 6.0, 6.0
     LEFT, RIGHT, TOP, BOTTOM = 0.8, 0.2, 0.2, 0.2
-    GAP = 0.20
+    GAP = 0.4
     LEG_H = 0.42 * nrows + 0.30
         
     fig_w = LEFT + PLOT_W + RIGHT
