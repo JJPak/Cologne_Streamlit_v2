@@ -81,6 +81,9 @@ def main():
         st.write(f"Aktiver Island-Filter: {', '.join(selected_islands)}")
 
     # Achsen-Auswahl
+    def idx(col_name, fallback=0):
+        return available_columns.index(col_name) if col_name in available_columns else fallback
+
     available_columns = list(filtered_df.columns)
     col1_index = available_columns.index("1") if "1" in available_columns else 0
     x1 = st.selectbox("X1:", available_columns, index=idx("1", 0))
